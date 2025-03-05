@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>班级点名系统</title>
+</head>
+
+<body>
+    <h1>欢迎来到班级点名系统。</h1>
+    <h1>{%if id!=0%}No.{{id}} {{name}}{%else%}请点击以下按钮以开始抽签。{%endif%}</h1>
+    <form action="/" method="post">
+        <input type="submit" value="抽签！" style="font-size:20px;">
+    </form>
+</body>
+
+</html>
