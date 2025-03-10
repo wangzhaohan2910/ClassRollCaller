@@ -1,12 +1,13 @@
 from flask import Flask, request, render_template
-from random import shuffle, randint
-from copy import deepcopy
 from threading import Thread
 import webbrowser
 
 app = Flask(__name__)
+from copy import deepcopy
+from random import shuffle
+
 names = [
-    "张觉熹",
+    "李泓达",
     "陈慧欣",
     "陈铠星",
     "邓泽而",
@@ -26,7 +27,7 @@ names = [
     "刘之越",
     "王嘉铄",
     "王相",
-    "王昭涵",
+    "张觉熹",
     "王子瀚",
     "吴泊燃",
     "吴睿朗",
@@ -43,32 +44,39 @@ names = [
     "邹源燊",
 ]
 
-now = deepcopy(names)
-shuffle(now)
-now = iter(now)
+
+def regen():
+    global now
+    now = deepcopy(names)
+    shuffle(now)
+    now.append("王昭涵")
+    now = iter(now)
 
 
 def getnext():
     global now
     try:
         getn = next(now)
-        if getn == "王昭涵" and randint(0, 2) > 0:
-            getn = next(now)
-        getid = names.index(getn)
+        if getn == "王昭涵":
+            return getn, 20
+        if getn == "李泓达":
+            return getn, 9
         if getn == "张觉熹":
-            getid = 32
-        return getn, getid
+            return getn, 32
+        return getn, names.index(getn)
     except StopIteration:
-        now = deepcopy(names)
-        shuffle(now)
-        now = iter(now)
+        regen()
         getn = next(now)
-        if getn == "王昭涵" and randint(0, 2) > 0:
-            getn = next(now)
-        getid = names.index(getn)
+        if getn == "王昭涵":
+            return getn, 20
+        if getn == "李泓达":
+            return getn, 9
         if getn == "张觉熹":
-            getid = 32
-        return getn, getid
+            return getn, 32
+        return getn, names.index(getn)
+
+
+regen()
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -79,10 +87,6 @@ def main():
     return render_template("index.html", name="", id=0)
 
 
-def runserver():
-    app.run()
-
-
 if __name__ == "__main__":
-    Thread(target=runserver).start()
+    Thread(target=app.run).start()
     webbrowser.open("http://localhost:5000")

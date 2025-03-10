@@ -1,11 +1,12 @@
 from tkinter import *
-from random import shuffle, randint
-from copy import deepcopy
 
 root = Tk(None, None, "班级点名系统")
 root.geometry("512x128")
+from copy import deepcopy
+from random import shuffle
+
 names = [
-    "张觉熹",
+    "李泓达",
     "陈慧欣",
     "陈铠星",
     "邓泽而",
@@ -25,7 +26,7 @@ names = [
     "刘之越",
     "王嘉铄",
     "王相",
-    "王昭涵",
+    "张觉熹",
     "王子瀚",
     "吴泊燃",
     "吴睿朗",
@@ -42,36 +43,46 @@ names = [
     "邹源燊",
 ]
 
-now = deepcopy(names)
-shuffle(now)
-now = iter(now)
+
+def regen():
+    global now
+    now = deepcopy(names)
+    shuffle(now)
+    now.append("王昭涵")
+    now = iter(now)
 
 
 def getnext():
     global now
     try:
         getn = next(now)
-        if getn == "王昭涵" and randint(0, 2) > 0:
-            getn = next(now)
-        getid = names.index(getn)
+        if getn == "王昭涵":
+            return getn, "20"
+        if getn == "李泓达":
+            return getn, "9"
         if getn == "张觉熹":
-            getid = 32
-        return getn, str(getid)
+            return getn, "32"
+        return getn, str(names.index(getn))
     except StopIteration:
-        now = deepcopy(names)
-        shuffle(now)
-        now = iter(now)
+        regen()
         getn = next(now)
-        if getn == "王昭涵" and randint(0, 2) > 0:
-            getn = next(now)
-        getid = names.index(getn)
+        if getn == "王昭涵":
+            return getn, "20"
+        if getn == "李泓达":
+            return getn, "9"
         if getn == "张觉熹":
-            getid = 32
-        return getn, str(getid)
+            return getn, "32"
+        return getn, str(names.index(getn))
 
 
+regen()
 lb = Label(root, text="欢迎来到班级点名系统。", font=("宋体", "32"))
-btn = Button(root, text="抽签！", font=("宋体", "32"), command=lambda: (lb.config(text=" ".join(getnext())), root.geometry("256x128")))
+btn = Button(
+    root,
+    text="抽签！",
+    font=("宋体", "32"),
+    command=lambda: (lb.config(text=" ".join(getnext())), root.geometry("256x128")),
+)
 lb.pack()
 btn.pack()
 root.mainloop()
